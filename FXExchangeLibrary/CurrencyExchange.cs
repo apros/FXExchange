@@ -1,41 +1,71 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ExchangeLibrary.Models;
 
+// Represents a class responsible for currency exchange calculations based on provided exchange rates.
 public class CurrencyExchange
 {
-    private readonly Dictionary<string, decimal> exchangeRates;
+    // List of exchange rates used for currency conversion.
+    private IList<Rate> exchangeRates;
 
-    public CurrencyExchange(Dictionary<string, decimal> exchangeRates)
+    // Initializes a new instance of the CurrencyExchange class with the specified exchange rates.
+    // Throws ArgumentNullException if exchangeRates is null.
+    public CurrencyExchange(IList<Rate> exchangeRates)
     {
+        if (exchangeRates == null)
+        {
+            throw new ArgumentNullException(nameof(exchangeRates), "Exchange rates are not set.");
+        }
+
         this.exchangeRates = exchangeRates;
     }
 
-    public decimal Exchange(string currencyPair, decimal amount)
+    // Performs currency exchange based on the provided ExchangeArgs.
+    // Throws ArgumentNullException if exchangeArgs is null.
+    // Throws ArgumentException if no matching exchange rates are found for the specified currencies.
+    public decimal Exchange(ExchageArgs exchangeArgs)
     {
-        var currencies = currencyPair.Split('/');
-        if (currencies.Length != 2)
+        if (exchangeArgs == null)
         {
-            throw new ArgumentException("Invalid currency pair format.");
+            throw new ArgumentNullException(nameof(exchangeArgs));
         }
 
-        string mainCurrency = currencies[0];
-        string moneyCurrency = currencies[1];
+        // If the base currency is the same as the target currency, no conversion needed.
+        if (exchangeArgs.BaseCurrency == exchangeArgs.Currency)
+        {
+            return exchangeArgs.Amount;
+        }
 
-        if (exchangeRates.ContainsKey(mainCurrency) && exchangeRates.ContainsKey(moneyCurrency))
+        decimal valueInBaseCurrency = 0m;
+
+        // Iterate through exchange rates to find a match for converting to the target currency.
+        foreach (var rate in exchangeRates)
         {
-            if (mainCurrency == moneyCurrency)
+            if (rate.BaseCurrency.CurrencyCode == "DKK" && rate.Currency.CurrencyCode == exchangeArgs.Currency)
             {
-                return amount; // Same currencies, return the amount as is
-            }
-            else
-            {
-                decimal exchangeRate = exchangeRates[moneyCurrency] / exchangeRates[mainCurrency];
-                return amount * exchangeRate;
+                // Calculate the value in the base currency using the exchange rate.
+                valueInBaseCurrency = (exchangeArgs.Amount * rate.ExchangeRate) / 100m;
+
+                // If the base currency is "DKK," return the rounded result.
+                if (exchangeArgs.BaseCurrency == "DKK")
+                {
+                    return Decimal.Round(valueInBaseCurrency, 4);
+                }
             }
         }
-        else
+
+        // Iterate through exchange rates to find a match for converting from the base currency.
+        foreach (var rate in exchangeRates)
         {
-            throw new ArgumentException("Unknown currency in the pair.");
+            if (rate.BaseCurrency.CurrencyCode == "DKK" && rate.Currency.CurrencyCode == exchangeArgs.BaseCurrency)
+            {
+                // Adjust the value based on the reverse exchange rate.
+                valueInBaseCurrency = valueInBaseCurrency / (rate.ExchangeRate / 100m);
+
+                // Return the rounded result after the conversion.
+                return Decimal.Round(valueInBaseCurrency, 4);
+            }
         }
+
+        // Handle cases where no matching rates are found for the specified currencies.
+        throw new ArgumentException("Exchange rates not found for the specified currencies.");
     }
 }
