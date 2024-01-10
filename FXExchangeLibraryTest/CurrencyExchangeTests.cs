@@ -1,7 +1,4 @@
 ﻿using ExchangeLibrary.Models;
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
 
 [TestFixture]
 public class CurrencyExchangeTests
@@ -114,5 +111,4 @@ public class CurrencyExchangeTests
         Assert.Throws<ArgumentException>(() => currencyExchange.Exchange(exchangeArgs));
     }
 
-    // Add more test cases for different scenarios
 }
