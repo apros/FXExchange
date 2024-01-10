@@ -1,33 +1,49 @@
-﻿// Exchange rates
-Dictionary<string, decimal> exchangeRates = new Dictionary<string, decimal>
-        {
-            { "EUR", 743.94m },
-            { "USD", 663.11m },
-            { "GBP", 852.85m },
-            { "SEK", 76.10m },
-            { "NOK", 78.40m },
-            { "CHF", 683.58m },
-            { "JPY", 5.9740m }
-        };
+﻿
+using Exchange;
+using ExchangeLibrary;
+using ExchangeLibrary.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 
-// Create instance of CurrencyExchange
-var currencyExchange = new CurrencyExchange(exchangeRates);
-
-// Input
-Console.Write("Enter ISO currency pair (e.g., EUR/USD): ");
-string currencyPair = Console.ReadLine().ToUpper();
-
-Console.Write("Enter amount: ");
-if (decimal.TryParse(Console.ReadLine(), out decimal amount))
+try
 {
-    // Calculate exchanged amount using the CurrencyExchange class
-    decimal exchangedAmount = currencyExchange.Exchange(currencyPair, amount);
+    // Check if any command-line arguments are provided
+    if (args.Length == 0)
+    {
+        Console.WriteLine("Usage: Exchange <currency pair> <amount to exchange>");
+    }
+    else
+    {
+        var serviceProvider = new ServiceCollection()
+            .AddSingleton<ICurrencyRateProvider, RatesProvider>()
+            .AddSingleton<IInputParsable, ConsoleInputParser>()
+            .BuildServiceProvider();
 
-    // Output result
-    Console.WriteLine($"Exchanged amount: {exchangedAmount} DKK");
+        // Create instance of RatesProvider
+        var exchangeRates = serviceProvider.GetRequiredService<ICurrencyRateProvider>();
+
+        // Create instance of CurrencyExchange
+        var currencyExchange = new CurrencyExchange(exchangeRates.GetRates());
+
+        // Input
+
+        string inputArgs = string.Join(" ", args);
+
+        var parser = serviceProvider.GetRequiredService<IInputParsable>();
+
+        var exchangeArgs = parser.ParseInput(inputArgs);
+
+        // Calculate exchanged amount using the CurrencyExchange class
+        decimal exchangedAmount = currencyExchange.Exchange(exchangeArgs);
+
+        // Output result
+        Console.WriteLine($"Exchanged amount: {exchangedAmount} {exchangeArgs.BaseCurrency}");
+    }
 }
-else
+catch (Exception ex)
 {
-    Console.WriteLine("Invalid amount entered.");
+    // Handle the exception
+    Console.WriteLine($"An error occurred: {ex.Message}");
+
+    // Exit the application with a non-zero exit code to indicate an error
+    Environment.ExitCode = 1;
 }
-    

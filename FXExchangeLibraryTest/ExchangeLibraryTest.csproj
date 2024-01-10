@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FXExchangeLibrary\FXExchangeLibrary.csproj" />
+    <ProjectReference Include="..\FXExchangeLibrary\ExchangeLibrary.csproj" />
   </ItemGroup>
 
 </Project>

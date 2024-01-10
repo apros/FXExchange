@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FXExchange", "FXExchange\FXExchange.csproj", "{70D2BBD0-E628-45FD-9856-2A3D3A792208}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exchange", "FXExchange\Exchange.csproj", "{70D2BBD0-E628-45FD-9856-2A3D3A792208}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FXExchangeLibrary", "FXExchangeLibrary\FXExchangeLibrary.csproj", "{39A60DA6-B0C9-410C-ABC4-B5DFDDAB68D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeLibrary", "FXExchangeLibrary\ExchangeLibrary.csproj", "{39A60DA6-B0C9-410C-ABC4-B5DFDDAB68D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FXExchangeLibraryTest", "FXExchangeLibraryTest\FXExchangeLibraryTest.csproj", "{6E92005D-226A-4F00-9553-5DB840DCF4A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeLibraryTest", "FXExchangeLibraryTest\ExchangeLibraryTest.csproj", "{6E92005D-226A-4F00-9553-5DB840DCF4A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
