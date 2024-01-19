@@ -6,7 +6,7 @@ namespace Exchange
     internal class RatesProvider : ICurrencyRateProvider
     {
         private List<Currency> countries;
-        private List<Rate> exchangeRates;
+        private Dictionary<string,Rate> exchangeRates;
 
         public RatesProvider()
         {
@@ -22,19 +22,19 @@ namespace Exchange
                 { new Currency() {Name = "Japanese Yen", CurrencyCode = "JPY" } }
             };
 
-            exchangeRates = new List<Rate>
+            exchangeRates = new Dictionary<string, Rate>
             {
-                new Rate() { BaseCurrency = countries[0], Currency = countries[1], ExchangeRate = 743.94m },
-                new Rate() { BaseCurrency = countries[0], Currency = countries[2], ExchangeRate = 663.11m },
-                new Rate() { BaseCurrency = countries[0], Currency = countries[3], ExchangeRate = 852.85m },
-                new Rate() { BaseCurrency = countries[0], Currency = countries[4], ExchangeRate = 76.10m },
-                new Rate() { BaseCurrency = countries[0], Currency = countries[5], ExchangeRate = 78.40m },
-                new Rate() { BaseCurrency = countries[0], Currency = countries[6], ExchangeRate = 683.58m },
-                new Rate() { BaseCurrency = countries[0], Currency = countries[7], ExchangeRate = 5.9740m }
+                { countries[1].CurrencyCode, new Rate() { BaseCurrency = countries[0], Currency = countries[1], ExchangeRate = 743.94m } },
+                { countries[2].CurrencyCode, new Rate() { BaseCurrency = countries[0], Currency = countries[2], ExchangeRate = 663.11m } },
+                { countries[3].CurrencyCode, new Rate() { BaseCurrency = countries[0], Currency = countries[3], ExchangeRate = 852.85m } },
+                { countries[4].CurrencyCode, new Rate() { BaseCurrency = countries[0], Currency = countries[4], ExchangeRate = 76.10m } },
+                { countries[5].CurrencyCode, new Rate() { BaseCurrency = countries[0], Currency = countries[5], ExchangeRate = 78.40m } },
+                { countries[6].CurrencyCode, new Rate() { BaseCurrency = countries[0], Currency = countries[6], ExchangeRate = 683.58m } },
+                { countries[7].CurrencyCode, new Rate() { BaseCurrency = countries[0], Currency = countries[7], ExchangeRate = 5.9740m } }
             };  
         }
         
-        public IList<Rate> GetRates()
+        public IDictionary<string, Rate> GetRates()
         {
             
             return exchangeRates;

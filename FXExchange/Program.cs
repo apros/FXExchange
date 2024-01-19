@@ -18,22 +18,22 @@ try
             .AddSingleton<IInputParsable, ConsoleInputParser>()
             .BuildServiceProvider();
 
-        // Create instance of RatesProvider
-        var exchangeRates = serviceProvider.GetRequiredService<ICurrencyRateProvider>();
-
-        // Create instance of CurrencyExchange
-        var currencyExchange = new CurrencyExchange(exchangeRates.GetRates());
-
         // Input
 
         string inputArgs = string.Join(" ", args);
 
         var parser = serviceProvider.GetRequiredService<IInputParsable>();
 
-        var exchangeArgs = parser.ParseInput(inputArgs);
+        var exchangeArgs = parser.ParseInput(inputArgs);        
+
+        // Create instance of RatesProvider
+        var exchangeRates = serviceProvider.GetRequiredService<ICurrencyRateProvider>();
+
+        // Create instance of CurrencyExchange
+        var currencyExchange = new CurrencyExchange(exchangeRates.GetRates());       
 
         // Calculate exchanged amount using the CurrencyExchange class
-        decimal exchangedAmount = currencyExchange.Exchange(exchangeArgs);
+        decimal exchangedAmount = Decimal.Round(currencyExchange.Exchange(exchangeArgs), 4);
 
         // Output result
         Console.WriteLine($"Exchanged amount: {exchangedAmount} {exchangeArgs.BaseCurrency}");
