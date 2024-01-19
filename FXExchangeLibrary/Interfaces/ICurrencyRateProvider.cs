@@ -4,6 +4,6 @@ namespace ExchangeLibrary.Interfaces
 {
     public interface ICurrencyRateProvider
     {
-        public IList<Rate> GetRates();
+        public IDictionary<string,Rate> GetRates();
     }
 }
